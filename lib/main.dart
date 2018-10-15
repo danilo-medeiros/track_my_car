@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import './pages/home.dart';
 
 import './pages/vehicles/vehicles.dart';
@@ -10,16 +11,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'Track my Car',
-      theme: new ThemeData(
-        primaryColor: Colors.indigo,
-        accentColor: Colors.indigoAccent
-      ),
-      routes: {
-        '/': (BuildContext context) => HomePage(),
-        '/vehicles': (BuildContext context) => VehiclesPage(),
-        '/vehicles/new': (BuildContext context) => VehicleFormPage()
-      }
-    );
+        title: 'Track my Car',
+        theme: new ThemeData(
+            primaryColor: Colors.indigo, accentColor: Colors.indigoAccent),
+        routes: {
+          '/': (BuildContext context) => HomePage(),
+          '/vehicles': (BuildContext context) => VehiclesPage(),
+          '/vehicles/new': (BuildContext context) => VehicleFormPage()
+        });
   }
+
+  VehicleDatabase() {}
 }

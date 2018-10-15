@@ -11,6 +11,7 @@ class VehicleFormPage extends StatefulWidget {
 class VehicleFormPageState extends State<VehicleFormPage> {
 
   final Vehicle _vehicle = new Vehicle();
+  
 
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
@@ -19,7 +20,9 @@ class VehicleFormPageState extends State<VehicleFormPage> {
       return;
     }
     _formKey.currentState.save();
-    Navigator.pushReplacementNamed(context, '/vehicles');
+    FocusScope.of(context).requestFocus(new FocusNode());
+    
+    //Navigator.pushReplacementNamed(context, '/vehicles');
   }
 
   @override
@@ -71,7 +74,8 @@ class VehicleFormPageState extends State<VehicleFormPage> {
               onSaved: (String value) {
                 this._vehicle.password = value;
               },
-            )
+            ),
+            Center(child: Text("${_vehicle.name}"),)
           ],
         ),
       )),
