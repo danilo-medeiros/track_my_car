@@ -69,16 +69,15 @@ class VehicleDatabase {
   Future<List<Vehicle>> listAll() async {
     var db = await _getDb();
     List<Map> queryResult = await db.query(tableName,
-      columns: [ "name", "number", "password", "profileId" ]);
-    print(queryResult.length);
+      columns: [ "id", "name", "number", "password", "profileId" ]);
     var vehicles = queryResult.map((vehicleMap) => 
       Vehicle.fromMap(vehicleMap)).toList();
-    print(vehicles);
     return vehicles;
   }
 
-  Future<int> delete(int id) async {
-    return await db.delete(tableName, where: "id = ?", whereArgs: [id]);
+  Future delete(int id) async {
+    print(id);
+    await db.delete(tableName, where: "id = ?", whereArgs: [id]);
   }
 
   Future<Vehicle> update(Vehicle vehicle) async {

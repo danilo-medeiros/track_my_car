@@ -3,32 +3,27 @@ import 'package:track_my_car/database/vehicle_database.dart';
 import 'package:track_my_car/models/vehicle.dart';
 
 class VehicleModel extends Model {
-
+  Vehicle selectedVehicle;
   bool _loading = false;
   VehicleDatabase _vehicleDatabase = VehicleDatabase.get();
-  List<Vehicle> _vehicles = [
-    /* Vehicle.fromVehicle("CHEVROLET CAMARO", "(84) 99212-0696", "123125", 2),
-    Vehicle.fromVehicle("FORD MUSTANG", "(84) 99417-5639", "123125", 2),
-    Vehicle.fromVehicle("TOYOTA COROLLA", "(84) 99886-4452", "123125", 2),
-    Vehicle.fromVehicle("FIAT 500", "(84) 99855-4452", "123125", 2) */
-  ];
+  List<Vehicle> _vehicles = [];
 
   bool get isLoading {
     return _loading;
-  } 
+  }
 
   VehicleModel() {
     _loading = true;
-    _vehicleDatabase.listAll().then(
-      (vehicles) {
-        _vehicles = vehicles;
-        notifyListeners();
-      }
-    ).then((_) {
+    _listVehicles().then((_) {
       _loading = false;
-    }); 
+      notifyListeners();
+    });
   }
-  
+
+  Future _listVehicles() async {
+    _vehicles = await _vehicleDatabase.listAll();
+  }
+
   List<Vehicle> get vehicles {
     return List.from(_vehicles);
   }
@@ -42,12 +37,19 @@ class VehicleModel extends Model {
     return vehicle;
   }
 
-  void deleteVehicle(num id) {
-    _vehicles.removeWhere((vehicle) => vehicle.id == id);
+  void deleteVehicle() {
+    _loading = true;
+    print("Deleting");
+    _vehicleDatabase
+        .delete(selectedVehicle.id)
+        .then((_) => _listVehicles())
+        .then((_) {
+      _loading = false;
+      notifyListeners();
+    });
   }
 
   Vehicle getVehicle(num id) {
     return _vehicles.firstWhere((vehicle) => vehicle.id == id);
   }
-
 }

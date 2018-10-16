@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:track_my_car/pages/vehicles/vehicle_details.dart';
 import 'package:track_my_car/scoped_models/vehicles.dart';
 
 
@@ -18,11 +19,12 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
             title: 'Track my Car',
             theme: new ThemeData(
-                primaryColor: Colors.indigo, accentColor: Colors.indigoAccent),
+                brightness: Brightness.dark),
             routes: {
-              '/': (BuildContext context) => VehiclesPage(),
+              '/': (BuildContext context) => HomePage(),
               '/vehicles': (BuildContext context) => VehiclesPage(),
-              '/vehicles/new': (BuildContext context) => VehicleFormPage()
+              '/vehicles/new': (BuildContext context) => VehicleFormPage(),
+              '/vehicles/details': (BuildContext context) => VehicleDetailsPage()
             }));
   }
 }

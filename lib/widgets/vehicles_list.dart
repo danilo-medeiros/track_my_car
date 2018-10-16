@@ -41,14 +41,16 @@ class VehiclesListState extends State<VehiclesList> {
                         child: Column(children: <Widget>[
                       ListTile(
                         onTap: () {
-                          print("Abrir detalhes do veículo");
+                          model.selectedVehicle = model.vehicles[index];
+                          print(model.selectedVehicle.id);
+                          Navigator.pushNamed(context, "/vehicles/details");
                         },
-                          title: Text(
-                            model.vehicles[index].name,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text(model.vehicles[index].number),
-                          trailing: _buildPositionButton(context, index))
+                        title: Text(
+                          model.vehicles[index].name,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(model.vehicles[index].number),
+                      )
                     ]));
                   },
                   itemCount: model.vehicles.length,
