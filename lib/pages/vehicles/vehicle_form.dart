@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:track_my_car/models/vehicle.dart';
+import 'package:track_my_car/scoped_models/vehicles.dart';
 
 class VehicleFormPage extends StatefulWidget {
   @override
@@ -11,33 +13,35 @@ class VehicleFormPage extends StatefulWidget {
 class VehicleFormPageState extends State<VehicleFormPage> {
 
   final Vehicle _vehicle = new Vehicle();
-  
 
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
-  void _submitForm() {
+  void _submitForm(Function save) {
     if (!_formKey.currentState.validate()) {
       return;
     }
     _formKey.currentState.save();
+    save(Vehicle.fromVehicle(_vehicle.name, _vehicle.number, _vehicle.password, _vehicle.profileId));
     FocusScope.of(context).requestFocus(new FocusNode());
-    
-    //Navigator.pushReplacementNamed(context, '/vehicles');
+    Navigator.pushReplacementNamed(context, '/vehicles');
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScopedModelDescendant<VehicleModel>(builder: (BuildContext context, Widget child, VehicleModel model) {
+      return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: _submitForm,
+        onPressed: () {
+          _submitForm(model.addVehicle);
+        },
         child: Icon(Icons.check),
       ),
       appBar: AppBar(title: Text("Adicionar veículo")),
       body: Container(
-        margin: EdgeInsets.all(20.0),
+        margin: EdgeInsets.symmetric(horizontal: 20.0),
           child: Form(
         key: _formKey,
-        child: Column(
+        child: ListView(
           children: <Widget>[
             TextFormField(
               decoration: InputDecoration(labelText: "Nome do veículo"),
@@ -74,11 +78,11 @@ class VehicleFormPageState extends State<VehicleFormPage> {
               onSaved: (String value) {
                 this._vehicle.password = value;
               },
-            ),
-            Center(child: Text("${_vehicle.name}"),)
+            )
           ],
         ),
       )),
     );
+    },); 
   }
 }

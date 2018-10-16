@@ -44,7 +44,6 @@ class VehicleDatabase {
             profileId integer
           )
         ''');
-        print("==== Creating database!! ====");
       });
     didInit = true;
   }
@@ -56,7 +55,6 @@ class VehicleDatabase {
       where: "id =?",
       whereArgs: [id]);
     if (queryResult.length > 0) {
-      print(queryResult[0]["id"]);
       return new Vehicle.fromMap(queryResult.first);
     }
     return null;
@@ -72,8 +70,10 @@ class VehicleDatabase {
     var db = await _getDb();
     List<Map> queryResult = await db.query(tableName,
       columns: [ "name", "number", "password", "profileId" ]);
+    print(queryResult.length);
     var vehicles = queryResult.map((vehicleMap) => 
       Vehicle.fromMap(vehicleMap)).toList();
+    print(vehicles);
     return vehicles;
   }
 
