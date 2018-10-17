@@ -15,9 +15,63 @@ class VehicleFormPageState extends State<VehicleFormPage> {
 
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
-  ///
-  /// @param save: The method that will be executed when the user submits the form.
-  ///
+  /// Build the vehicle's name field
+  Widget _buildNameField(String name) {
+    return Container(
+        padding: EdgeInsets.all(10.0),
+        child: TextFormField(
+          decoration: InputDecoration(hintText: "Nome do veículo"),
+          initialValue: name != null ? name : "",
+          textCapitalization: TextCapitalization.words,
+          validator: (String value) {
+            if (value.isEmpty) {
+              return "Informe o nome do veículo";
+            }
+          },
+          onSaved: (String value) {
+            this._vehicle.name = value;
+          },
+        ));
+  }
+
+  Widget _buildNumberField(String number) {
+    return Container(
+      padding: EdgeInsets.all(10.0),
+      child: TextFormField(
+        decoration: InputDecoration(hintText: "Número do chip"),
+        initialValue: number != null ? number : "",
+        keyboardType: TextInputType.number,
+        validator: (String value) {
+          if (value.isEmpty) {
+            return "Informe o número do chip";
+          }
+        },
+        onSaved: (String value) {
+          this._vehicle.number = value;
+        },
+      ),
+    );
+  }
+
+  Widget _buildPasswordField(String password) {
+    return Container(
+      padding: EdgeInsets.all(10.0),
+        child: TextFormField(
+      decoration: InputDecoration(hintText: "Senha do rastreador"),
+      obscureText: true,
+      initialValue: password != null ? password : "",
+      validator: (String value) {
+        if (value.isEmpty) {
+          return "Informe a senha do rastreador";
+        }
+      },
+      onSaved: (String value) {
+        this._vehicle.password = value;
+      },
+    ));
+  }
+
+  /// save: The method that will be executed when the user submits the form.
   void _submitForm(Function save) {
     if (!_formKey.currentState.validate()) {
       return;
@@ -32,67 +86,29 @@ class VehicleFormPageState extends State<VehicleFormPage> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<VehicleModel>(
       builder: (BuildContext context, Widget child, VehicleModel model) {
-        print("====== Form rendered ======");
         return Scaffold(
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              _submitForm(model.selectedVehicle == null ? model.save : model.update);
+              _submitForm(
+                  model.selectedVehicle.id == null ? model.save : model.update);
             },
             child: Icon(Icons.check),
           ),
           appBar: AppBar(
-              title: Text(model.selectedVehicle != null
+              title: Text(model.selectedVehicle.id != null
                   ? "Editar veículo"
                   : "Adicionar veículo")),
           body: Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.0),
               child: Form(
-                key: _formKey,
-                child: ListView(
-                  children: <Widget>[
-                    TextFormField(
-                      decoration: InputDecoration(labelText: "Nome do veículo"),
-                      initialValue: model.selectedVehicle != null
-                          ? model.selectedVehicle.name
-                          : "",
-                      textCapitalization: TextCapitalization.words,
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return "Informe o nome do veículo";
-                        }
-                      },
-                      onSaved: (String value) {
-                        this._vehicle.name = value;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(labelText: "Número do chip"),
-                      keyboardType: TextInputType.number,
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return "Informe o número do chip";
-                        }
-                      },
-                      onSaved: (String value) {
-                        this._vehicle.number = value;
-                      },
-                    ),
-                    TextFormField(
-                      decoration:
-                          InputDecoration(labelText: "Senha do rastreador"),
-                      obscureText: true,
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return "Informe a senha do rastreador";
-                        }
-                      },
-                      onSaved: (String value) {
-                        this._vehicle.password = value;
-                      },
-                    )
-                  ],
-                ),
-              )),
+            key: _formKey,
+            child: ListView(
+              children: <Widget>[
+                _buildNameField(model.selectedVehicle.name),
+                _buildNumberField(model.selectedVehicle.number),
+                _buildPasswordField(model.selectedVehicle.password),
+              ],
+            ),
+          )),
         );
       },
     );

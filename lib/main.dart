@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
             routes: {
               '/': (BuildContext context) => HomePage(),
               '/vehicles': (BuildContext context) => VehiclesPage(),
-              '/vehicles/new': (BuildContext context) => VehicleFormPage(),
+              '/vehicles/form': (BuildContext context) => VehicleFormPage(),
               '/vehicles/details': (BuildContext context) => VehicleDetailsPage()
             }));
   }

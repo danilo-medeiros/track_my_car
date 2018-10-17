@@ -7,7 +7,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:track_my_car/models/vehicle.dart';
 
 class VehicleDatabase {
-
   final String tableName = "vehicles";
   static final VehicleDatabase _vehicleDatabase = VehicleDatabase._internal();
   bool didInit = false;
@@ -32,28 +31,39 @@ class VehicleDatabase {
 
   Future _init() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "track_my_car.db");
+    String path = join(documentsDirectory.path, "track_my_car_2.db");
     db = await openDatabase(path, version: 1,
-      onCreate: (Database db, int version) async {
-        await db.execute('''
+        onCreate: (Database db, int version) async {
+      await db.execute('''
           create table $tableName (
             id integer primary key autoincrement,
             name text not null,
             number text not null,
             password text not null,
+            lastLongitude text,
+            lastLatitude text,
             profileId integer
           )
         ''');
-      });
+      print("============= CREATING $tableName TABLE =============");
+    });
     didInit = true;
   }
 
   Future<Vehicle> getById(int id) async {
     var db = await _getDb();
     List<Map> queryResult = await db.query(tableName,
-      columns: [ "name", "number", "password", "profileId" ],
-      where: "id =?",
-      whereArgs: [id]);
+        columns: [
+          "id",
+          "name",
+          "number",
+          "password",
+          "lastLatitude",
+          "lastLongitude",
+          "profileId"
+        ],
+        where: "id =?",
+        whereArgs: [id]);
     if (queryResult.length > 0) {
       return new Vehicle.fromMap(queryResult.first);
     }
@@ -68,10 +78,10 @@ class VehicleDatabase {
 
   Future<List<Vehicle>> listAll() async {
     var db = await _getDb();
-    List<Map> queryResult = await db.query(tableName,
-      columns: [ "id", "name", "number", "password", "profileId" ]);
-    var vehicles = queryResult.map((vehicleMap) => 
-      Vehicle.fromMap(vehicleMap)).toList();
+    List<Map> queryResult =
+        await db.query(tableName, columns: ["id", "name", "number"]);
+    var vehicles =
+        queryResult.map((vehicleMap) => Vehicle.fromMap(vehicleMap)).toList();
     return vehicles;
   }
 
@@ -80,9 +90,8 @@ class VehicleDatabase {
   }
 
   Future<Vehicle> update(Vehicle vehicle) async {
-    vehicle.id = await db.update(tableName, vehicle.toMap(), 
-      where: "id = ${vehicle.id}",
-      whereArgs: [vehicle.id]);
+    vehicle.id = await db.update(tableName, vehicle.toUpdatableMap(),
+        where: "id = ${vehicle.id}");
     return vehicle;
   }
 

@@ -11,19 +11,6 @@ class VehiclesList extends StatefulWidget {
 
 class VehiclesListState extends State<VehiclesList> {
 
-  VehiclesListState() {
-    print("=========== VehiclesListState Constructor ===========");
-  }
-
-  Widget _buildPositionButton(BuildContext context, int index) {
-    return IconButton(
-      icon: Icon(Icons.gps_fixed),
-      onPressed: () {
-        print("Locate vehicle");
-        },
-        );
-  }
-
   @override
   Widget build(BuildContext context) {
 
@@ -50,8 +37,7 @@ class VehiclesListState extends State<VehiclesList> {
                 child: Column(children: <Widget>[
                   ListTile(
                     onTap: () {
-                      model.selectedVehicle = model.vehicles[index];
-                      print(model.selectedVehicle.id);
+                      model.select(model.vehicles[index].id);
                       Navigator.pushNamed(context, "/vehicles/details");
                       },
                       title: Text(

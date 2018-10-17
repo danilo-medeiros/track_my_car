@@ -35,7 +35,7 @@ class VehiclesPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.pushNamed(context, '/vehicles/new');
+          Navigator.pushNamed(context, '/vehicles/form');
         },
       ),
       body: VehiclesList(),

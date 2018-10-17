@@ -2,10 +2,10 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:track_my_car/database/vehicle_database.dart';
 import 'package:track_my_car/models/vehicle.dart';
 
+/// Vehicle Scoped Model that holds the vehicle's list and selected vehicle state
 class VehicleModel extends Model {
-
   /// Selected vehicle to show/edit
-  Vehicle selectedVehicle;
+  Vehicle _selectedVehicle;
 
   /// Attribute to set the state of loading
   bool _loading = false;
@@ -21,57 +21,64 @@ class VehicleModel extends Model {
     return _loading;
   }
 
-  Future updateList() async {
-    vehicles = await _database.listAll();
+  VehicleModel() {
+    list();
   }
 
-  Future _saveVehicle(Vehicle vehicle) async {
-    selectedVehicle = await _database.insert(vehicle);
+  Vehicle get selectedVehicle {
+    if (_selectedVehicle == null) {
+      return new Vehicle();
+    }
+    return _selectedVehicle;
   }
 
-  Future _updateVehicle(Vehicle vehicle) async {
-    selectedVehicle = await _database.update(vehicle);
+  set selectedVehicle(Vehicle selectedVehicle) {
+    _selectedVehicle = selectedVehicle;
   }
 
   void list() {
     _loading = true;
-    updateList().then((_) {
-      print("Finished loading");
-      _loading = false;
-      print("Notifying listeners!!!!");
+    _database.listAll().then((_vehicles) {
+      vehicles = _vehicles;
       notifyListeners();
-    });
+    }).then((_) => _loading = false);
   }
 
+  /// Save vehicle and list vehicles
   void save(Vehicle vehicle) {
-    _loading= true;
-    _saveVehicle(vehicle).then((_) {
+    _loading = true;
+    _database.insert(vehicle).then((vehicle) {
+      selectedVehicle = vehicle;
       notifyListeners();
-    }).then((_) {
-      list();
-    });
+    }).then((_) => list());
   }
 
+  /// Update vehicle and list vehicles
   void update(Vehicle vehicle) {
-    _loading= true;
-    _updateVehicle(vehicle).then((_) {
+    _loading = true;
+    _database.update(vehicle).then((vehicle) {
+      selectedVehicle = vehicle;
       notifyListeners();
     }).then((_) {
       list();
     });
   }
 
+  /// Delete vehicle and list vehicles
   void delete() {
     _loading = true;
-    _database.delete(selectedVehicle.id)
-      .then((id) => notifyListeners())
-      .then((_) => list());
+    _database.delete(selectedVehicle.id).then((id) {
+      selectedVehicle = null;
+      notifyListeners();
+    }).then((_) => list());
   }
 
-  VehicleModel() {
-    print("========= VehicleModel Constructor =========");
-    print("========= Fetching vehicle data =========");
-    list();
+  void select(num id) {
+    _loading = true;
+    _database.getById(id).then((vehicle) {
+      selectedVehicle = vehicle;
+      notifyListeners();
+    }).then((_) => _loading = false);
   }
 
 }

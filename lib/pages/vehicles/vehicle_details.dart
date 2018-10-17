@@ -10,6 +10,7 @@ class VehicleDetailsPage extends StatefulWidget {
 }
 
 class VehicleDetailsPageState extends State<VehicleDetailsPage> {
+
   Future<Null> _buildDeleteVehicleDialog(Function delete) async {
     return showDialog<Null>(
       context: context,
@@ -56,7 +57,7 @@ class VehicleDetailsPageState extends State<VehicleDetailsPage> {
             Navigator.pop(context, false);
             return Future.value(false);
           },
-          child: model.selectedVehicle != null
+          child: !model.isLoading && model.selectedVehicle.id != null
               ? Scaffold(
                   appBar: AppBar(
                     title: Text(model.selectedVehicle.name),
@@ -72,7 +73,7 @@ class VehicleDetailsPageState extends State<VehicleDetailsPage> {
                   floatingActionButton: FloatingActionButton(
                     child: Icon(Icons.edit),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/vehicles/new');
+                      Navigator.pushNamed(context, '/vehicles/form');
                     },
                   ),
                   body: ListView(children: <Widget>[
@@ -91,7 +92,9 @@ class VehicleDetailsPageState extends State<VehicleDetailsPage> {
                           ),
                         )),
                     Center(
-                        child: Text("Última localização: -45.23123, -56.04993"))
+                        child: Text(model.selectedVehicle.lastLatitude != null
+                            ? "Última localização: ${model.selectedVehicle.lastLatitude}, ${model.selectedVehicle.lastLongitude}"
+                            : "Localização indefinida"))
                   ]))
               : Center(
                   child: Text("Nenhum veículo cadastrado"),
