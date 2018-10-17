@@ -76,7 +76,6 @@ class VehicleDatabase {
   }
 
   Future delete(int id) async {
-    print(id);
     await db.delete(tableName, where: "id = ?", whereArgs: [id]);
   }
 

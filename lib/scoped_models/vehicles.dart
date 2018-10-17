@@ -3,53 +3,75 @@ import 'package:track_my_car/database/vehicle_database.dart';
 import 'package:track_my_car/models/vehicle.dart';
 
 class VehicleModel extends Model {
-  Vehicle selectedVehicle;
-  bool _loading = false;
-  VehicleDatabase _vehicleDatabase = VehicleDatabase.get();
-  List<Vehicle> _vehicles = [];
 
+  /// Selected vehicle to show/edit
+  Vehicle selectedVehicle;
+
+  /// Attribute to set the state of loading
+  bool _loading = false;
+
+  /// Database access class
+  VehicleDatabase _database = VehicleDatabase.get();
+
+  /// Vehicles list
+  List<Vehicle> vehicles = [];
+
+  // CHECK IF SCREEN IS LOADING
   bool get isLoading {
     return _loading;
   }
 
+  Future updateList() async {
+    vehicles = await _database.listAll();
+  }
+
+  Future _saveVehicle(Vehicle vehicle) async {
+    selectedVehicle = await _database.insert(vehicle);
+  }
+
+  Future _updateVehicle(Vehicle vehicle) async {
+    selectedVehicle = await _database.update(vehicle);
+  }
+
+  void list() {
+    _loading = true;
+    updateList().then((_) {
+      print("Finished loading");
+      _loading = false;
+      print("Notifying listeners!!!!");
+      notifyListeners();
+    });
+  }
+
+  void save(Vehicle vehicle) {
+    _loading= true;
+    _saveVehicle(vehicle).then((_) {
+      notifyListeners();
+    }).then((_) {
+      list();
+    });
+  }
+
+  void update(Vehicle vehicle) {
+    _loading= true;
+    _updateVehicle(vehicle).then((_) {
+      notifyListeners();
+    }).then((_) {
+      list();
+    });
+  }
+
+  void delete() {
+    _loading = true;
+    _database.delete(selectedVehicle.id)
+      .then((id) => notifyListeners())
+      .then((_) => list());
+  }
+
   VehicleModel() {
-    _loading = true;
-    _listVehicles().then((_) {
-      _loading = false;
-      notifyListeners();
-    });
+    print("========= VehicleModel Constructor =========");
+    print("========= Fetching vehicle data =========");
+    list();
   }
 
-  Future _listVehicles() async {
-    _vehicles = await _vehicleDatabase.listAll();
-  }
-
-  List<Vehicle> get vehicles {
-    return List.from(_vehicles);
-  }
-
-  Vehicle addVehicle(Vehicle vehicle) {
-    _vehicles.add(vehicle);
-    return vehicle;
-  }
-
-  Vehicle updateVehicle(Vehicle vehicle) {
-    return vehicle;
-  }
-
-  void deleteVehicle() {
-    _loading = true;
-    print("Deleting");
-    _vehicleDatabase
-        .delete(selectedVehicle.id)
-        .then((_) => _listVehicles())
-        .then((_) {
-      _loading = false;
-      notifyListeners();
-    });
-  }
-
-  Vehicle getVehicle(num id) {
-    return _vehicles.firstWhere((vehicle) => vehicle.id == id);
-  }
 }
