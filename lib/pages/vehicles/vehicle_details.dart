@@ -6,7 +6,6 @@ import 'package:track_my_car/widgets/item_details.dart';
 import 'package:track_my_car/widgets/loading.dart';
 
 class VehicleDetailsPage extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<VehicleModel>(
@@ -29,13 +28,13 @@ class VehicleDetailsPage extends StatelessWidget {
                     child: Center(child: Text("O mapa vai aqui"))),
                 Container(
                     margin: EdgeInsets.symmetric(vertical: 10.0),
-                    child: Center(
-                      child: Text(
-                        vehicle.name,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20.0),
-                      ),
-                    )),
+                    child: _buildDataRow("Nome do veículo", vehicle.name)),
+                Container(
+                    margin: EdgeInsets.symmetric(vertical: 10.0),
+                    child: _buildDataRow("Número do chip", vehicle.number)),
+                Container(
+                    margin: EdgeInsets.symmetric(vertical: 10.0),
+                    child: _buildDataRow("Senha", vehicle.password)),
                 Center(
                     child: Text(vehicle.lastLatitude != null
                         ? "Última localização: ${vehicle.lastLatitude}, ${vehicle.lastLongitude}"
@@ -52,5 +51,27 @@ class VehicleDetailsPage extends StatelessWidget {
         ),
       );
     });
+  }
+
+  Widget _buildDataRow(String title, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Expanded(
+          child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              child: Text(
+                title,
+                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              )),
+        ),
+        Expanded(
+            child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: Text(value,
+                    style: TextStyle(
+                        fontSize: 16.0, fontWeight: FontWeight.bold))))
+      ],
+    );
   }
 }

@@ -58,7 +58,6 @@ class VehicleFormPageState extends State<VehicleFormPage> {
         padding: EdgeInsets.all(10.0),
         child: TextFormField(
           decoration: InputDecoration(hintText: "Senha do rastreador"),
-          obscureText: true,
           initialValue: password != null ? password : "",
           validator: (String value) {
             if (value.isEmpty) {

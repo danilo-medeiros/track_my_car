@@ -12,14 +12,14 @@ class HomePage extends StatelessWidget {
         leading: Icon(Icons.add),
         title: Text("Veículos"),
         onTap: () {
-          Navigator.pushReplacementNamed(context, '/vehicles');
+          Navigator.pushNamed(context, '/vehicles');
         },
       ),
       ListTile(
         leading: Icon(Icons.create_new_folder),
         title: Text("Perfis"),
         onTap: () {
-          Navigator.pushReplacementNamed(context, '/profiles');
+          Navigator.pushNamed(context, '/profiles');
         },
       )
     ]));
@@ -51,7 +51,7 @@ class HomePage extends StatelessWidget {
         child: RaisedButton(
           color: Colors.black12,
           onPressed: () {
-            Navigator.pushReplacementNamed(context, route);
+            Navigator.pushNamed(context, route);
           },
           elevation: 1.5,
           child: Column(

@@ -30,7 +30,6 @@ class VehiclesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: _buildDrawer(context),
       appBar: AppBar(title: Text("Veículos")),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),

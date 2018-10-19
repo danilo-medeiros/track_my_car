@@ -37,7 +37,7 @@ class VehicleModel extends Model {
   }
 
   Future delete() async {
-    await _database.delete(selectedVehicle.id);
+    return await _database.delete(selectedVehicle.id).then((_) => selectedVehicle = null);
   }
   
 }
