@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:track_my_car/pages/profiles/profiles.dart';
 import 'package:track_my_car/pages/vehicles/vehicle_details.dart';
 import 'package:track_my_car/scoped_models/vehicles.dart';
 
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
               '/': (BuildContext context) => HomePage(),
               '/vehicles': (BuildContext context) => VehiclesPage(),
               '/vehicles/form': (BuildContext context) => VehicleFormPage(),
-              '/vehicles/details': (BuildContext context) => VehicleDetailsPage()
+              '/vehicles/details': (BuildContext context) => VehicleDetailsPage(),
+              '/profiles': (BuildContext context) => ProfilesPage()
             }));
   }
 }

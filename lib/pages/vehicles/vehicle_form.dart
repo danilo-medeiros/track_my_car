@@ -55,31 +55,32 @@ class VehicleFormPageState extends State<VehicleFormPage> {
 
   Widget _buildPasswordField(String password) {
     return Container(
-      padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(10.0),
         child: TextFormField(
-      decoration: InputDecoration(hintText: "Senha do rastreador"),
-      obscureText: true,
-      initialValue: password != null ? password : "",
-      validator: (String value) {
-        if (value.isEmpty) {
-          return "Informe a senha do rastreador";
-        }
-      },
-      onSaved: (String value) {
-        this._vehicle.password = value;
-      },
-    ));
+          decoration: InputDecoration(hintText: "Senha do rastreador"),
+          obscureText: true,
+          initialValue: password != null ? password : "",
+          validator: (String value) {
+            if (value.isEmpty) {
+              return "Informe a senha do rastreador";
+            }
+          },
+          onSaved: (String value) {
+            this._vehicle.password = value;
+          },
+        ));
   }
 
   /// save: The method that will be executed when the user submits the form.
-  void _submitForm(Function save) {
+  void _submitForm(Function(Vehicle vehicle) persist, Function callback) {
     if (!_formKey.currentState.validate()) {
       return;
     }
     _formKey.currentState.save();
-    save(_vehicle);
-    Navigator.pushReplacementNamed(context, '/vehicles/details');
-    FocusScope.of(context).requestFocus(new FocusNode());
+    persist(_vehicle).then((_) {
+      callback();
+      FocusScope.of(context).requestFocus(new FocusNode());
+    });
   }
 
   @override
@@ -89,24 +90,30 @@ class VehicleFormPageState extends State<VehicleFormPage> {
         return Scaffold(
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              _submitForm(
-                  model.selectedVehicle.id == null ? model.save : model.update);
+              if (model.selectedVehicle != null) {
+                _submitForm(model.update, () => Navigator.pop(context));
+              } else {
+                _submitForm(model.save, () => Navigator.popAndPushNamed(context, '/vehicles/details'));
+              }
             },
             child: Icon(Icons.check),
           ),
           appBar: AppBar(
-              title: Text(model.selectedVehicle.id != null
+              title: Text(model.selectedVehicle != null
                   ? "Editar veículo"
                   : "Adicionar veículo")),
           body: Container(
               child: Form(
             key: _formKey,
-            child: ListView(
-              children: <Widget>[
-                _buildNameField(model.selectedVehicle.name),
-                _buildNumberField(model.selectedVehicle.number),
-                _buildPasswordField(model.selectedVehicle.password),
-              ],
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              child: ListView(
+                children: <Widget>[
+                  _buildNameField(model.selectedVehicle?.name),
+                  _buildNumberField(model.selectedVehicle?.number),
+                  _buildPasswordField(model.selectedVehicle?.password),
+                ],
+              ),
             ),
           )),
         );

@@ -17,10 +17,7 @@ class Vehicle {
     this.profileId = vehicleMap["profileId"];
   }
 
-  Vehicle() {
-    this.id = null;
-    this.name = null;
-    this.number = null;
+  Vehicle({this.id, this.name, this.number}) {
     this.password = null;
     this.lastLatitude = null;
     this.lastLongitude = null;

@@ -1,60 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:track_my_car/scoped_models/vehicles.dart';
+import 'package:track_my_car/widgets/item_list.dart';
+import 'package:track_my_car/widgets/loading.dart';
 
-class VehiclesList extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return VehiclesListState();
-  }
-}
-
-class VehiclesListState extends State<VehiclesList> {
-
+class VehiclesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     return ScopedModelDescendant<VehicleModel>(
       builder: (BuildContext context, Widget child, VehicleModel model) {
-
-        /// If the request is still running
-        if (model.isLoading) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-              CircularProgressIndicator(),
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text("Carregando veículos"))
-              ]));
-        } 
-        else {
-          return model.vehicles.length > 0
-          ? ListView.builder(
-            itemBuilder: (BuildContext context, int index) {
-              return Card(
-                child: Column(children: <Widget>[
-                  ListTile(
-                    onTap: () {
-                      model.select(model.vehicles[index].id);
-                      Navigator.pushNamed(context, "/vehicles/details");
-                      },
-                      title: Text(
-                        model.vehicles[index].name,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      subtitle: Text(model.vehicles[index].number),
-                      )
-                  ]));
-              },
-              itemCount: model.vehicles.length,
-              )
-          : Center(
-            child: Text("Nenhum veículo cadastrado"),
-            );
-        }
-        },
-        );
+        return FutureBuilder(
+            future: model.list(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                return ItemList(
+                    detailsRoute: "/vehicles/details",
+                    itens: snapshot.data,
+                    selectItem: model.select);
+              } else {
+                return Loading();
+              }
+            });
+      },
+    );
   }
 }

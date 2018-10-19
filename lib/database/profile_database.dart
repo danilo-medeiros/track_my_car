@@ -1,0 +1,3 @@
+class ProfileDatabase {
+  /// TODO: Implement Profile database methods...
+}
