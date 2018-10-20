@@ -26,29 +26,113 @@ class VehicleDetailsPage extends StatelessWidget {
                     height: MediaQuery.of(context).size.height / 2,
                     // Dummy text
                     child: Center(child: Text("O mapa vai aqui"))),
-                Container(
-                    margin: EdgeInsets.symmetric(vertical: 10.0),
-                    child: _buildDataRow("Nome do veículo", vehicle.name)),
-                Container(
-                    margin: EdgeInsets.symmetric(vertical: 10.0),
-                    child: _buildDataRow("Número do chip", vehicle.number)),
-                Container(
-                    margin: EdgeInsets.symmetric(vertical: 10.0),
-                    child: _buildDataRow("Senha", vehicle.password)),
-                Center(
-                    child: Text(vehicle.lastLatitude != null
-                        ? "Última localização: ${vehicle.lastLatitude}, ${vehicle.lastLongitude}"
-                        : "Localização indefinida"))
+                Card(
+                  child: Column(
+                    children: <Widget>[
+                      const ListTile(
+                        leading: Icon(Icons.gps_fixed),
+                        title: Text('Localizado última vez em 23/04/2018 10:45'),
+                      ),
+                      ButtonTheme.bar(
+                        // make buttons use the appropriate styles for cards
+                        child: ButtonBar(
+                          children: <Widget>[
+                            FlatButton(
+                              child: const Text('VER HISTÓRICO'),
+                              onPressed: () {/* ... */},
+                            ),
+                            FlatButton(
+                              child: const Text('LOCALIZAR AGORA'),
+                              onPressed: () {/* ... */},
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Card(
+                  child: Column(
+                    children: <Widget>[
+                      const ListTile(
+                        leading: Icon(Icons.lock),
+                        title: Text('Bloqueio de combustível'),
+                      ),
+                      ButtonTheme.bar(
+                        // make buttons use the appropriate styles for cards
+                        child: ButtonBar(
+                          children: <Widget>[
+                            FlatButton(
+                              child: const Text('BLOQUEAR'),
+                              onPressed: () {/* ... */},
+                            ),
+                            FlatButton(
+                              child: const Text('DESBLOQUEAR'),
+                              onPressed: () {/* ... */},
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                /* Card(
+                    child: Container(
+                        child: Row(children: <Widget>[
+                          Icon(Icons.gps_fixed),
+                          SizedBox(
+                            width: 10.0,
+                          ),
+                          Text(
+                            vehicle.lastLatitude != null
+                                ? "Última localização: ${vehicle.lastLatitude}, ${vehicle.lastLongitude}"
+                                : "Localização indefinida",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20.0),
+                          )
+                        ]),
+                        padding: EdgeInsets.all(15.0))),
+                Card(
+                    child: Container(
+                        child: Row(children: <Widget>[
+                          Icon(Icons.phone),
+                          SizedBox(
+                            width: 10.0,
+                          ),
+                          Text(
+                            vehicle.number,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20.0),
+                          )
+                        ]),
+                        padding: EdgeInsets.all(15.0))),
+                Card(
+                    child: Container(
+                        child: Row(children: <Widget>[
+                          Icon(Icons.vpn_key),
+                          SizedBox(
+                            width: 10.0,
+                          ),
+                          Text(
+                            vehicle.password,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20.0),
+                          )
+                        ]),
+                        padding: EdgeInsets.all(15.0))), */
               ]);
             } else {
               return Loading();
             }
           },
         ),
-        floatingActionButton: FloatingActionButton(
+        /* floatingActionButton: FloatingActionButton(
           child: Icon(Icons.edit),
           onPressed: () => Navigator.pushNamed(context, '/vehicles/form'),
-        ),
+        ), */
       );
     });
   }
