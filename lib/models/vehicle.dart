@@ -1,5 +1,6 @@
-class Vehicle {
-  num id;
+import 'package:track_my_car/models/basic_model.dart';
+
+class Vehicle extends BasicModel {
   String name;
   String number;
   String password;
@@ -17,7 +18,8 @@ class Vehicle {
     this.profileId = vehicleMap["profileId"];
   }
 
-  Vehicle({this.id, this.name, this.number}) {
+  Vehicle({id, this.name, this.number}) {
+    this.id = id;
     this.password = null;
     this.lastLatitude = null;
     this.lastLongitude = null;

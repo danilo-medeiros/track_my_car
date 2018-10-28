@@ -1,3 +1,0 @@
-abstract class GenericDatabase<T> {
-  /// TODO: Implement Generic Database methods...
-}
