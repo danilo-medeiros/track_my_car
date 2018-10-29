@@ -8,7 +8,7 @@ class ListItem {
   ListItem.fromMap(Map<int, dynamic> map) {
     this.id = map[0];
     this.name = map[1];
-    this.detail = map[2];  
+    this.detail = map[2];
   }
 
   Map<int, dynamic> toMap() => {

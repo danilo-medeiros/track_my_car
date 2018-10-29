@@ -47,7 +47,7 @@ class ProfileDatabase {
   }
 
   Future<List<ListItem>> listAll() async {
-    return await _databaseAccess.listAll(tableName, ['id', 'name']);
+    return await _databaseAccess.listAll(tableName, ['id', 'name', 'position']);
   }
 
 }
